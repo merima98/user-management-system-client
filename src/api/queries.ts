@@ -1,7 +1,7 @@
 import axios from "../httpClient";
 
-function getUsers(condition: string, order: string, pageSize: number) {
-    return axios.get(`/users?_sort=${condition}&_order=${order}&_limit=${pageSize}`);
+function getUsers(pageSize: number) {
+    return axios.get(`/users?_limit=${pageSize}`);
 }
 
 

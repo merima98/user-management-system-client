@@ -13,7 +13,6 @@ import {
 } from "@chakra-ui/react";
 import { Moon, Sun, User } from "react-feather";
 import { Link } from "react-router-dom";
-import UserSearchForm from "../user/UserSearchForm";
 
 function Header() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -36,9 +35,7 @@ function Header() {
           <Box fontSize={"sm"}>
             <Link to="/">User management system</Link>
           </Box>
-          <Box>
-            <UserSearchForm />
-          </Box>
+
           <Box cursor={"pointer"} fontSize={"sm"}>
             <Link to="/new-user">New user</Link>
           </Box>

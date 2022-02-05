@@ -1,170 +1,107 @@
-import {
-  Button,
-  Center,
-  Flex,
-  Table,
-  Th,
-  Thead,
-  Tr,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Button, Center } from "@chakra-ui/react";
+import React from "react";
 import { useState } from "react";
-import { ArrowDown, ArrowUp } from "react-feather";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query/react";
+import { Cell } from "react-table";
 
 import queries from "../../api/queries";
-import { User } from "../../models/User";
-import { useUsers } from "../../state";
-import UserList from "../user/UserList";
+import UserTable from "../user/UserTable";
 
 function UserListHeader() {
-  const [condition, setCondition] = useState("firstName");
-  const [order, setOrder] = useState("asc");
   const defaultPageSize = 10;
   const [pageSize, setPageSize] = useState(defaultPageSize);
 
-  const { setUsers, stateUsers } = useUsers();
-
-  const queryClient = useQueryClient();
   const { data } = useQuery(
-    ["users-list", condition, order, pageSize],
-    () => queries.getUsers(condition, order, pageSize),
+    ["users-list", pageSize],
+    () => queries.getUsers(pageSize),
     {
       keepPreviousData: true,
-      onSuccess: (data) => {
-        setUsers(data.data);
-      },
     }
   );
-  const borderColor = useColorModeValue("gray.300", "orange");
-  const tableHeadBackgroundColor = useColorModeValue("white", "gray.800");
+  const users = data ? data.data : [];
 
-  function sortUsers(attribute: string, order: string) {
-    setCondition(attribute);
-    setOrder(order);
-    queryClient.invalidateQueries("users-list");
+  function buttonFunction(props: any) {
+    console.log("Props value,", props);
   }
-
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: "First name",
+        accessor: "firstName",
+      },
+      {
+        Header: "Last name",
+        accessor: "lastName",
+      },
+      {
+        Header: "Username",
+        accessor: "username",
+      },
+      {
+        Header: "Email",
+        accessor: "email",
+      },
+      {
+        Header: "Status",
+        accessor: "status",
+      },
+      {
+        Header: "Actions",
+        accessor: "id",
+        Cell: function idCell(props: Cell) {
+          return (
+            <>
+              <Button
+                mb={1}
+                size="sm"
+                zIndex={-1}
+                w={20}
+                colorScheme={"blue"}
+                onClick={() => buttonFunction(props.value)}
+              >
+                Assign
+              </Button>
+              <Button
+                zIndex={-1}
+                mb={1}
+                w={20}
+                size="sm"
+                colorScheme={"blue"}
+                onClick={() => buttonFunction(props.value)}
+              >
+                Edit
+              </Button>
+              <Button
+                w={20}
+                mb={1}
+                zIndex={-1}
+                size="sm"
+                colorScheme={"red"}
+                onClick={() => buttonFunction(props.value)}
+              >
+                Delete
+              </Button>
+            </>
+          );
+        },
+      },
+    ],
+    []
+  );
   function loadMoreUsers() {
     let newPageSize = pageSize;
     newPageSize += defaultPageSize;
     setPageSize(newPageSize);
   }
   return (
-    <Center flexDirection={"column"}>
-      <Table size="sm" mb={8} mt={20} w={"50vw"}>
-        <Thead
-          position={"sticky"}
-          top={"3rem"}
-          backgroundColor={tableHeadBackgroundColor}
-        >
-          <Tr>
-            <Th borderBottom={"1px solid"} borderColor={borderColor}>
-              <Flex flexDirection={"row"}>
-                First name{" "}
-                <ArrowUp
-                  height={"20px"}
-                  cursor={"pointer"}
-                  onClick={() => sortUsers("firstName", "asc")}
-                />
-                <ArrowDown
-                  height={"20px"}
-                  cursor={"pointer"}
-                  onClick={() => sortUsers("firstName", "desc")}
-                />
-              </Flex>
-            </Th>
-            <Th borderBottom={"1px solid"} borderColor={borderColor}>
-              <Flex flexDirection={"row"}>
-                Last name{" "}
-                <ArrowUp
-                  height={"20px"}
-                  cursor={"pointer"}
-                  onClick={() => sortUsers("lastName", "asc")}
-                />
-                <ArrowDown
-                  height={"20px"}
-                  cursor={"pointer"}
-                  onClick={() => sortUsers("lastName", "desc")}
-                />
-              </Flex>
-            </Th>
-            <Th borderBottom={"1px solid"} borderColor={borderColor}>
-              <Flex flexDirection={"row"}>
-                Username{" "}
-                <ArrowUp
-                  height={"20px"}
-                  cursor={"pointer"}
-                  onClick={() => sortUsers("username", "asc")}
-                />
-                <ArrowDown
-                  height={"20px"}
-                  cursor={"pointer"}
-                  onClick={() => sortUsers("username", "desc")}
-                />
-              </Flex>
-            </Th>
-            <Th borderBottom={"1px solid"} borderColor={borderColor}>
-              <Flex flexDirection={"row"}>
-                Email{" "}
-                <ArrowUp
-                  height={"20px"}
-                  cursor={"pointer"}
-                  onClick={() => sortUsers("email", "asc")}
-                />
-                <ArrowDown
-                  height={"20px"}
-                  cursor={"pointer"}
-                  onClick={() => sortUsers("email", "desc")}
-                />
-              </Flex>
-            </Th>
-            <Th borderBottom={"1px solid"} borderColor={borderColor}>
-              <Flex flexDirection={"row"}>
-                Status{" "}
-                <ArrowUp
-                  height={"20px"}
-                  cursor={"pointer"}
-                  onClick={() => sortUsers("status", "asc")}
-                />
-                <ArrowDown
-                  height={"20px"}
-                  cursor={"pointer"}
-                  onClick={() => sortUsers("status", "desc")}
-                />
-              </Flex>
-            </Th>
-            <Th borderBottom={"1px solid"} borderColor={borderColor}>
-              Permission
-            </Th>
-            <Th borderBottom={"1px solid"} borderColor={borderColor}>
-              Edit
-            </Th>
-            <Th borderBottom={"1px solid"} borderColor={borderColor}>
-              Delete
-            </Th>
-          </Tr>
-        </Thead>
-        {stateUsers.map((user: User) => {
-          return (
-            <UserList
-              email={user.email}
-              password={user.password}
-              firstName={user.firstName}
-              lastName={user.lastName}
-              id={user.id}
-              username={user.username}
-              status={user.status}
-              permissionId={user.permissionId}
-              key={user.id}
-            />
-          );
-        })}
-      </Table>
-      <Button mb={3} colorScheme="blue" size="xs" onClick={loadMoreUsers}>
-        Load more
-      </Button>
-    </Center>
+    <>
+      <UserTable data={users} columns={columns} />
+      <Center>
+        <Button mb={3} colorScheme="blue" size="xs" onClick={loadMoreUsers}>
+          Load more
+        </Button>
+      </Center>
+    </>
   );
 }
 export default UserListHeader;
