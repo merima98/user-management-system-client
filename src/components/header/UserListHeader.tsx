@@ -32,7 +32,7 @@ function UserListHeader() {
   }
   return (
     <Center flexDirection={"column"}>
-      <Table size="sm" mb={5}>
+      <Table size="sm" mb={8} mt={20} w={"50vw"}>
         <Thead>
           <Tr>
             <Th>

@@ -21,17 +21,17 @@ function UserList(props: User) {
         <Td>{email}</Td>
         <Td>{status}</Td>
         <Td>
-          <Button colorScheme="blue" size="xs">
+          <Button colorScheme="blue" size="xs" zIndex={-1}>
             Assign
           </Button>
         </Td>
         <Td>
-          <Button colorScheme="blue" size="xs">
+          <Button colorScheme="blue" size="xs" zIndex={-1}>
             Edit
           </Button>
         </Td>
         <Td>
-          <Button colorScheme="red" size="xs">
+          <Button colorScheme="red" size="xs" zIndex={-1}>
             Delete
           </Button>
         </Td>
