@@ -1,0 +1,42 @@
+import { Button, Tbody, Td, Tr } from "@chakra-ui/react";
+import { User } from "../../models/User";
+
+function UserList(props: User) {
+  const {
+    firstName,
+    lastName,
+    username,
+    id,
+    email,
+    password,
+    status,
+    permissionId,
+  } = props;
+  return (
+    <Tbody>
+      <Tr>
+        <Td>{firstName}</Td>
+        <Td>{lastName}</Td>
+        <Td>{username}</Td>
+        <Td>{email}</Td>
+        <Td>{status}</Td>
+        <Td>
+          <Button colorScheme="blue" size="xs">
+            Assign
+          </Button>
+        </Td>
+        <Td>
+          <Button colorScheme="blue" size="xs">
+            Edit
+          </Button>
+        </Td>
+        <Td>
+          <Button colorScheme="red" size="xs">
+            Delete
+          </Button>
+        </Td>
+      </Tr>
+    </Tbody>
+  );
+}
+export default UserList;
