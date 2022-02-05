@@ -23,6 +23,9 @@ function UserListHeader() {
   function buttonFunction(props: any) {
     console.log("Props value,", props);
   }
+  function formatStatus(status: number) {
+    return status ? "Active" : "Inactive";
+  }
   const columns = React.useMemo(
     () => [
       {
@@ -44,6 +47,9 @@ function UserListHeader() {
       {
         Header: "Status",
         accessor: "status",
+        Cell: function updatedAtCell(props: Cell) {
+          return <>{formatStatus(props.value)}</>;
+        },
       },
       {
         Header: "Actions",

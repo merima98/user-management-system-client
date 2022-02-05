@@ -15,7 +15,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { map } from "ramda";
-import GlobalFilter from "../../GlobalFilter";
+import GlobalFilter from "../GlobalFilter";
 
 type props = {
   size?: "sm" | "md" | "lg";
@@ -74,7 +74,7 @@ function UserTable(props: props) {
                       >
                         {column.render("Header")}
                         <Text>
-                          {column.isSorted &&
+                          {column.canFilter &&
                           column.render("Header") !== "Actions" ? (
                             column.isSortedDesc ? (
                               <ArrowDown />
