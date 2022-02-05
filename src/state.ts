@@ -1,26 +1,10 @@
 import create, { SetState } from "zustand";
-import { User } from "./models/User";
 
 type Auth = {
     isLoggedIn: boolean;
     setIsLoggedIn: (value: boolean, userId: string, token?: string) => void;
     setLoggedOut: (value: boolean) => void;
 };
-
-type Users = {
-    stateUsers: User[];
-    setUsers: (value: {
-        email: string;
-        firstName: string;
-        id: number;
-        lastName: string;
-        password: string;
-        permissionId: number;
-        status: number;
-        username: string;
-    }) => void;
-};
-
 
 const useAuth = create<Auth>((set: SetState<Auth>) => ({
     isLoggedIn: Boolean(window.localStorage.getItem("token")) || false,
@@ -41,12 +25,4 @@ const useAuth = create<Auth>((set: SetState<Auth>) => ({
     }
 }));
 
-const useUsers = create<Users>((set: SetState<Users>) => ({
-    stateUsers: [],
-    setUsers(value: any) {
-        return set({ stateUsers: [...value] });
-    }
-}))
-
-
-export { useAuth, useUsers, };
+export { useAuth };

@@ -1,4 +1,5 @@
 
+import { FormControlOptions } from "@chakra-ui/react";
 import axios from "../httpClient";
 
 function register(user: {
@@ -12,8 +13,13 @@ function register(user: {
 }) {
     return axios.post(`/register`, user);
 }
+function login(credentials: FormControlOptions) {
+    return axios.post(`/login`, credentials);
+}
+
 
 const exports = {
     register,
+    login
 };
 export default exports;

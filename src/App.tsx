@@ -3,11 +3,15 @@ import { QueryClient } from "react-query";
 import { QueryClientProvider } from "react-query/react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "./components/header/Header";
-import UserListHeader from "./components/header/UserListHeader";
-import NewUserForm from "./components/user/NewUserForm";
+import {
+  LOGGED_IN_DEFAULT_LAYOUT_ROUTES,
+  LOGGED_OUT_NO_LAYOUT_ROUTES,
+} from "./routing/routes";
+import { useAuth } from "./state";
 
 function App() {
   const queryClient = new QueryClient();
+  const isLoggedIn = useAuth((state) => state.isLoggedIn);
 
   return (
     <ChakraProvider>
@@ -16,8 +20,25 @@ function App() {
         <BrowserRouter>
           <Header />
           <Routes>
-            <Route path={"/"} element={<UserListHeader />} />
-            <Route path={"/new-user"} element={<NewUserForm />} />
+            {isLoggedIn
+              ? LOGGED_IN_DEFAULT_LAYOUT_ROUTES.map((item) => {
+                  return (
+                    <Route
+                      key={item.path}
+                      path={item.path}
+                      element={<item.element />}
+                    />
+                  );
+                })
+              : LOGGED_OUT_NO_LAYOUT_ROUTES.map((item) => {
+                  return (
+                    <Route
+                      key={item.path}
+                      path={item.path}
+                      element={<item.element />}
+                    />
+                  );
+                })}
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>

@@ -52,7 +52,7 @@ function UserTable(props: props) {
   return (
     <Center>
       <ChakraTable size={size} {...getTableProps()} mt={20} w={"70vw"} mb={8}>
-        <Thead position={"sticky"} top={"3rem"} bg={tableHeadBackgroundColor}>
+        <Thead position={"sticky"} top={"2.5rem"} bg={tableHeadBackgroundColor}>
           {map(
             (group) => (
               <Tr
@@ -62,6 +62,7 @@ function UserTable(props: props) {
                 {map(
                   (column: any) => (
                     <Th
+                      p={5}
                       {...column.getHeaderProps(column.getSortByToggleProps())}
                       key={column.getHeaderProps().key}
                     >
