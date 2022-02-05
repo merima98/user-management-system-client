@@ -1,4 +1,13 @@
-import { Button, Center, Flex, Table, Th, Thead, Tr } from "@chakra-ui/react";
+import {
+  Button,
+  Center,
+  Flex,
+  Table,
+  Th,
+  Thead,
+  Tr,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import { useState } from "react";
 import { ArrowDown, ArrowUp } from "react-feather";
 import { useQuery, useQueryClient } from "react-query";
@@ -13,9 +22,13 @@ function UserListHeader() {
   const defaultPageSize = 10;
   const [pageSize, setPageSize] = useState(defaultPageSize);
   const queryClient = useQueryClient();
-  const { data } = useQuery(["users-list", condition, order, pageSize], () =>
-    queries.getUsers(condition, order, pageSize)
+  const { data } = useQuery(
+    ["users-list", condition, order, pageSize],
+    () => queries.getUsers(condition, order, pageSize),
+    { keepPreviousData: true }
   );
+  const borderColor = useColorModeValue("gray.300", "orange");
+  const tableHeadBackgroundColor = useColorModeValue("white", "gray.800");
 
   const users = data ? data?.data : [];
 
@@ -33,9 +46,13 @@ function UserListHeader() {
   return (
     <Center flexDirection={"column"}>
       <Table size="sm" mb={8} mt={20} w={"50vw"}>
-        <Thead>
+        <Thead
+          position={"sticky"}
+          top={"3rem"}
+          backgroundColor={tableHeadBackgroundColor}
+        >
           <Tr>
-            <Th>
+            <Th borderBottom={"1px solid"} borderColor={borderColor}>
               <Flex flexDirection={"row"}>
                 First name{" "}
                 <ArrowUp
@@ -50,7 +67,7 @@ function UserListHeader() {
                 />
               </Flex>
             </Th>
-            <Th>
+            <Th borderBottom={"1px solid"} borderColor={borderColor}>
               <Flex flexDirection={"row"}>
                 Last name{" "}
                 <ArrowUp
@@ -65,7 +82,7 @@ function UserListHeader() {
                 />
               </Flex>
             </Th>
-            <Th>
+            <Th borderBottom={"1px solid"} borderColor={borderColor}>
               <Flex flexDirection={"row"}>
                 Username{" "}
                 <ArrowUp
@@ -80,7 +97,7 @@ function UserListHeader() {
                 />
               </Flex>
             </Th>
-            <Th>
+            <Th borderBottom={"1px solid"} borderColor={borderColor}>
               <Flex flexDirection={"row"}>
                 Email{" "}
                 <ArrowUp
@@ -95,7 +112,7 @@ function UserListHeader() {
                 />
               </Flex>
             </Th>
-            <Th>
+            <Th borderBottom={"1px solid"} borderColor={borderColor}>
               <Flex flexDirection={"row"}>
                 Status{" "}
                 <ArrowUp
@@ -110,9 +127,15 @@ function UserListHeader() {
                 />
               </Flex>
             </Th>
-            <Th>Permission</Th>
-            <Th>Edit</Th>
-            <Th>Delete</Th>
+            <Th borderBottom={"1px solid"} borderColor={borderColor}>
+              Permission
+            </Th>
+            <Th borderBottom={"1px solid"} borderColor={borderColor}>
+              Edit
+            </Th>
+            <Th borderBottom={"1px solid"} borderColor={borderColor}>
+              Delete
+            </Th>
           </Tr>
         </Thead>
         {users.map((user: User) => {

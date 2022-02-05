@@ -12,6 +12,10 @@ function UserList(props: User) {
     status,
     permissionId,
   } = props;
+
+  function determinStatus(status: number) {
+    return status ? "Active" : "Inactive";
+  }
   return (
     <Tbody>
       <Tr>
@@ -19,7 +23,7 @@ function UserList(props: User) {
         <Td>{lastName}</Td>
         <Td>{username}</Td>
         <Td>{email}</Td>
-        <Td>{status}</Td>
+        <Td>{determinStatus(status)}</Td>
         <Td>
           <Button colorScheme="blue" size="xs" zIndex={-1}>
             Assign

@@ -4,7 +4,6 @@ import {
   Container,
   InputRightElement,
   FormControl,
-  FormControlOptions,
   FormErrorMessage,
   Input,
   InputGroup,
@@ -17,9 +16,10 @@ import {
   FormLabel,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { ErrorOption, useForm } from "react-hook-form";
+import { ErrorOption, FieldValues, useForm } from "react-hook-form";
 import { Eye, EyeOff, ChevronRight } from "react-feather";
 import { useMutation, useQueryClient } from "react-query";
+import { toInteger } from "lodash";
 import { useNavigate } from "react-router-dom";
 import mutations from "../../api/mutations";
 
@@ -59,8 +59,25 @@ function NewUserForm() {
     },
   });
 
-  function onSubmit(values: FormControlOptions) {
-    createNewUserMutation.mutate(values);
+  function onSubmit(values: FieldValues) {
+    let newUser: {
+      firstName: string;
+      lastName: string;
+      username: string;
+      email: string;
+      password: string;
+      status: number;
+      permissionId: number;
+    } = {
+      firstName: values.firstName,
+      lastName: values.lastName,
+      username: values.username,
+      email: values.email,
+      password: values.password,
+      status: toInteger(values.status),
+      permissionId: toInteger(values.permissionId),
+    };
+    createNewUserMutation.mutate(newUser);
   }
 
   function handleClick() {
@@ -185,12 +202,22 @@ function NewUserForm() {
           <FormControl isInvalid={errors.status}>
             <FormLabel>User status</FormLabel>
             <InputGroup>
-              <RadioGroup defaultValue="1">
+              <RadioGroup defaultValue={1}>
                 <Stack spacing={5} direction="row">
-                  <Radio colorScheme="red" value="0" {...register("status")}>
+                  <Radio
+                    colorScheme="red"
+                    value={0}
+                    {...register("status")}
+                    type="number"
+                  >
                     Inactive user
                   </Radio>
-                  <Radio colorScheme="green" value="1" {...register("status")}>
+                  <Radio
+                    colorScheme="green"
+                    value={1}
+                    {...register("status")}
+                    type="number"
+                  >
                     Active user
                   </Radio>
                 </Stack>
@@ -200,18 +227,20 @@ function NewUserForm() {
           <FormControl isInvalid={errors.permissionId}>
             <FormLabel>User role</FormLabel>
             <InputGroup>
-              <RadioGroup defaultValue="2">
+              <RadioGroup defaultValue={2}>
                 <Stack spacing={5} direction="row">
                   <Radio
+                    type="number"
                     colorScheme="green"
-                    value="1"
+                    value={1}
                     {...register("permissionId")}
                   >
                     Admin
                   </Radio>
                   <Radio
                     colorScheme="green"
-                    value="2"
+                    type="number"
+                    value={2}
                     {...register("permissionId")}
                   >
                     Regular user
