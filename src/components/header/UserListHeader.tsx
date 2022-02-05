@@ -14,6 +14,7 @@ import { useQuery, useQueryClient } from "react-query";
 
 import queries from "../../api/queries";
 import { User } from "../../models/User";
+import { useUsers } from "../../state";
 import UserList from "../user/UserList";
 
 function UserListHeader() {
@@ -21,16 +22,22 @@ function UserListHeader() {
   const [order, setOrder] = useState("asc");
   const defaultPageSize = 10;
   const [pageSize, setPageSize] = useState(defaultPageSize);
+
+  const { setUsers, stateUsers } = useUsers();
+
   const queryClient = useQueryClient();
   const { data } = useQuery(
     ["users-list", condition, order, pageSize],
     () => queries.getUsers(condition, order, pageSize),
-    { keepPreviousData: true }
+    {
+      keepPreviousData: true,
+      onSuccess: (data) => {
+        setUsers(data.data);
+      },
+    }
   );
   const borderColor = useColorModeValue("gray.300", "orange");
   const tableHeadBackgroundColor = useColorModeValue("white", "gray.800");
-
-  const users = data ? data?.data : [];
 
   function sortUsers(attribute: string, order: string) {
     setCondition(attribute);
@@ -138,7 +145,7 @@ function UserListHeader() {
             </Th>
           </Tr>
         </Thead>
-        {users.map((user: User) => {
+        {stateUsers.map((user: User) => {
           return (
             <UserList
               email={user.email}
