@@ -1,7 +1,6 @@
 import React from "react";
 import { useTable, useFilters, useGlobalFilter, useSortBy } from "react-table";
-import { ArrowDown, ArrowUp } from "react-feather";
-
+import { ChevronDown, ChevronUp } from "react-feather";
 import {
   Table as ChakraTable,
   Thead,
@@ -15,19 +14,18 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { map } from "ramda";
+
 import GlobalFilter from "../GlobalFilter";
 
 type props = {
   size?: "sm" | "md" | "lg";
   columns: any;
   data: any;
-  hiddenColumns?: string[];
 };
 
 function UserTable(props: props) {
   const tableHeadBackgroundColor = useColorModeValue("white", "gray.800");
-
-  const { size = "sm", columns, data, hiddenColumns = [] } = props;
+  const { size = "sm", columns, data } = props;
   const defaultColumn: any = React.useMemo(
     () => ({
       Filter: GlobalFilter,
@@ -40,9 +38,6 @@ function UserTable(props: props) {
         columns,
         data,
         defaultColumn,
-        initialState: {
-          hiddenColumns,
-        },
       },
       useFilters,
       useGlobalFilter,
@@ -51,7 +46,13 @@ function UserTable(props: props) {
 
   return (
     <Center>
-      <ChakraTable size={size} {...getTableProps()} mt={20} w={"70vw"} mb={8}>
+      <ChakraTable
+        size={size}
+        {...getTableProps()}
+        mt={20}
+        w={{ base: "100vw", md: "70vw" }}
+        mb={8}
+      >
         <Thead
           position={"sticky"}
           top={"2.5rem"}
@@ -61,6 +62,8 @@ function UserTable(props: props) {
           {map(
             (group) => (
               <Tr
+                display={{ base: "flex", md: "table-row" }}
+                flexDirection={{ base: "column", md: "row" }}
                 {...group.getHeaderGroupProps()}
                 key={group.getHeaderGroupProps().key}
               >
@@ -83,9 +86,9 @@ function UserTable(props: props) {
                           {column.canFilter &&
                           column.render("Header") !== "Actions" ? (
                             column.isSortedDesc ? (
-                              <ArrowDown />
+                              <ChevronDown size={16} />
                             ) : (
-                              <ArrowUp />
+                              <ChevronUp size={16} />
                             )
                           ) : (
                             ""
@@ -112,13 +115,21 @@ function UserTable(props: props) {
           {map((row) => {
             prepareRow(row);
             return (
-              <Tr {...row.getRowProps()} key={row.getRowProps().key}>
+              <Tr
+                {...row.getRowProps()}
+                key={row.getRowProps().key}
+                display={{ base: "flex", md: "table-row" }}
+                flexDirection={{ base: "column", md: "row" }}
+              >
                 {map((cell) => {
                   return (
                     <Td
                       {...cell.getCellProps()}
                       key={cell.getCellProps().key}
                       textAlign={"center"}
+                      display={{ base: "flex", md: "table-cell" }}
+                      flexDirection={"row"}
+                      justifyContent={"center"}
                     >
                       {cell.render("Cell")}
                     </Td>

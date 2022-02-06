@@ -21,6 +21,7 @@ import { Eye, EyeOff, ChevronRight } from "react-feather";
 import { useMutation, useQueryClient } from "react-query/react";
 import { toInteger } from "lodash";
 import { useNavigate } from "react-router-dom";
+
 import mutations from "../../api/mutations";
 
 function NewUserForm() {

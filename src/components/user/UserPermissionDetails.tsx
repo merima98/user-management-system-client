@@ -19,14 +19,18 @@ import { FieldValues, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query/react";
 import { toInteger } from "lodash";
 import { useParams } from "react-router-dom";
+
 import mutations from "../../api/mutations";
 import queries from "../../api/queries";
 import { User } from "../../models/User";
 
 function UserPermissionDetails() {
   const { handleSubmit, register } = useForm();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const queryClient = useQueryClient();
+  const params = useParams();
+  const userId = params.id;
 
   const updateUserPermissionMutation = useMutation(
     mutations.updateUserPermission,
@@ -52,15 +56,10 @@ function UserPermissionDetails() {
     };
     updateUserPermissionMutation.mutate(userData);
   }
-  const params = useParams();
-
-  const userId = params.id;
 
   const { data } = useQuery("user", () =>
     queries.getUserById(toInteger(userId))
   );
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
   function fromatPermission(permission: number) {
     return permission === 1 ? "Admin" : "Regular user";
   }

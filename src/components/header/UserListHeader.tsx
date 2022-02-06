@@ -5,12 +5,14 @@ import {
   AlertDialog,
   AlertDialogBody,
   AlertDialogContent,
+  Box,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogOverlay,
   useToast,
 } from "@chakra-ui/react";
 import React, { useRef } from "react";
+import { toInteger } from "lodash";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query/react";
 import { Link, useNavigate } from "react-router-dom";
@@ -18,11 +20,14 @@ import { Cell } from "react-table";
 import mutations from "../../api/mutations";
 
 import queries from "../../api/queries";
+import { useAuth } from "../../state";
 import UserTable from "../user/UserTable";
 
 function UserListHeader() {
   const defaultPageSize = 10;
   const [pageSize, setPageSize] = useState(defaultPageSize);
+  const isLoggedIn = useAuth((state) => state.isLoggedIn);
+
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [userId, setUserId] = useState(0);
 
@@ -57,6 +62,11 @@ function UserListHeader() {
       });
     },
   });
+  const loggedUserId = toInteger(window.localStorage.getItem("userId"));
+  const currentLoggedUserQuery = useQuery("current-logged-user", () =>
+    queries.getUserById(loggedUserId)
+  );
+  const loggedUser = currentLoggedUserQuery?.data;
 
   const columns = React.useMemo(
     () => [
@@ -87,12 +97,14 @@ function UserListHeader() {
         Header: "Actions",
         accessor: "id",
         Cell: function idCell(props: Cell) {
-          return (
-            <Flex flexDirection={"column"}>
+          return isLoggedIn &&
+            loggedUser?.data &&
+            loggedUser?.data[0]?.permissionId === 1 ? (
+            <Flex flexDirection={{ base: "column", sm: "row", md: "column" }}>
               <Link to={`/permission/user/${props.value}`}>
                 <Button
                   mb={1}
-                  size="sm"
+                  size="xs"
                   zIndex={-1}
                   w={20}
                   colorScheme={"blue"}
@@ -105,18 +117,18 @@ function UserListHeader() {
                   zIndex={-1}
                   mb={1}
                   w={20}
-                  size="sm"
+                  size="xs"
                   colorScheme={"blue"}
                 >
                   Edit
                 </Button>
               </Link>
-              <>
+              <Box>
                 <Button
                   w={20}
                   mb={1}
                   zIndex={1}
-                  size="sm"
+                  size="xs"
                   colorScheme={"red"}
                   cursor={"pointer"}
                   onClick={() => {
@@ -162,13 +174,19 @@ function UserListHeader() {
                     </AlertDialogContent>
                   </AlertDialogOverlay>
                 </AlertDialog>
-              </>
+              </Box>
             </Flex>
+          ) : (
+            <Link to={`/user/${props.value}`}>
+              <Button colorScheme="green" size="xs">
+                View
+              </Button>
+            </Link>
           );
         },
       },
     ],
-    [isOpenAlert, deleteUserMutation, userId]
+    [isOpenAlert, deleteUserMutation, userId, isLoggedIn, loggedUser?.data]
   );
   function loadMoreUsers() {
     let newPageSize = pageSize;

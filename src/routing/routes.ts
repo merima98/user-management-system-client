@@ -32,6 +32,10 @@ const LOGGED_OUT_NO_LAYOUT_ROUTES = [
         path: "/login",
         element: Login,
     },
+    {
+        path: "/user/:id",
+        element: UserDetails,
+    },
 ];
 
 export { LOGGED_OUT_NO_LAYOUT_ROUTES, LOGGED_IN_DEFAULT_LAYOUT_ROUTES };

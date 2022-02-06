@@ -13,7 +13,10 @@ import {
 } from "@chakra-ui/react";
 import { Moon, Sun, User } from "react-feather";
 import { Link } from "react-router-dom";
+import { toInteger } from "lodash";
 import { useAuth } from "../../state";
+import { useQuery } from "react-query";
+import queries from "../../api/queries";
 
 function Header() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -26,6 +29,12 @@ function Header() {
   function logout() {
     setLoggedOut(false);
   }
+
+  const loggedUserId = toInteger(window.localStorage.getItem("userId"));
+  const currentLoggedUserQuery = useQuery("current-logged-user", () =>
+    queries.getUserById(loggedUserId)
+  );
+  const loggedUser = currentLoggedUserQuery?.data;
 
   return (
     <Container
@@ -45,10 +54,13 @@ function Header() {
             <Box fontSize={"sm"}>
               <Link to="/">User management system</Link>
             </Box>
-
-            <Box cursor={"pointer"} fontSize={"sm"}>
-              <Link to="/new-user">New user</Link>
-            </Box>
+            {isLoggedIn &&
+              loggedUser?.data &&
+              loggedUser?.data[0]?.permissionId === 1 && (
+                <Box cursor={"pointer"} fontSize={"sm"}>
+                  <Link to="/new-user">New user</Link>
+                </Box>
+              )}
             <Box>
               <Menu>
                 <MenuButton transition="all 0.2s">

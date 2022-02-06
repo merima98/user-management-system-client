@@ -22,9 +22,11 @@ import { FieldValues, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query/react";
 import { toInteger } from "lodash";
 import { useParams } from "react-router-dom";
+
 import mutations from "../../api/mutations";
 import queries from "../../api/queries";
 import { User } from "../../models/User";
+import { useAuth } from "../../state";
 
 function UserDetails() {
   const {
@@ -32,8 +34,12 @@ function UserDetails() {
     register,
     formState: { errors },
   } = useForm();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const queryClient = useQueryClient();
+  const isLoggedIn = useAuth((state) => state.isLoggedIn);
+  const params = useParams();
+  const userId = params.id;
 
   const updateUserDataMutation = useMutation(mutations.updateUserData, {
     onSuccess: (data) => {
@@ -62,18 +68,17 @@ function UserDetails() {
     };
     updateUserDataMutation.mutate(userData);
   }
-  const params = useParams();
-
-  const userId = params.id;
-
   const { data } = useQuery("user", () =>
     queries.getUserById(toInteger(userId))
   );
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
   function formatStatus(status: number) {
     return status ? "Active" : "Inactive";
   }
+  const loggedUserId = toInteger(window.localStorage.getItem("userId"));
+  const currentLoggedUserQuery = useQuery("current-logged-user", () =>
+    queries.getUserById(loggedUserId)
+  );
+  const loggedUser = currentLoggedUserQuery?.data;
 
   return (
     <Container
@@ -125,89 +130,93 @@ function UserDetails() {
               </Text>
               <Text>{formatStatus(user?.status)}</Text>
             </Flex>
-            <Flex
-              justifyContent={"space-between"}
-              flexDirection={{ base: "column", sm: "row" }}
-              mb={2}
-            >
-              <Button colorScheme="blue" size="xs" onClick={onOpen} mb={1}>
-                Change user data
-              </Button>
-              <Modal isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay />
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <ModalContent>
-                    <ModalHeader>Update your profile</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody pb={3}>
-                      <FormControl isInvalid={errors.firstName}>
-                        <Input
-                          mb={1}
-                          placeholder="First name"
-                          defaultValue={user?.firstName}
-                          type={"text"}
-                          {...register("firstName", {
-                            required: "First name is required field!",
-                          })}
-                        />
-                        <FormErrorMessage mb={1}>
-                          {errors.firstName && errors.firstName.message}
-                        </FormErrorMessage>
-                      </FormControl>
-                      <FormControl isInvalid={errors.lastName}>
-                        <Input
-                          mb={1}
-                          placeholder="Last name"
-                          defaultValue={user?.lastName}
-                          type={"text"}
-                          {...register("lastName", {
-                            required: "Last name is required field!",
-                          })}
-                        />
-                        <FormErrorMessage mb={1}>
-                          {errors.lastName && errors.lastName.message}
-                        </FormErrorMessage>
-                      </FormControl>
-                      <FormControl isInvalid={errors.email}>
-                        <Input
-                          mb={1}
-                          placeholder="Email"
-                          defaultValue={user?.email}
-                          type={"email"}
-                          {...register("email", {
-                            required: "Email is required filed!",
-                          })}
-                        />
-                        <FormErrorMessage mb={1}>
-                          {errors.email && errors.email.message}
-                        </FormErrorMessage>
-                      </FormControl>
-                      <FormControl isInvalid={errors.status}>
-                        <FormLabel>User status</FormLabel>
-                        <Select {...register("status")} type="number">
-                          <option value={1}>Active</option>
-                          <option value={0}>Inactive</option>
-                        </Select>
-                      </FormControl>
-                    </ModalBody>
-                    <ModalFooter>
-                      <Button
-                        type="submit"
-                        colorScheme="green"
-                        size="xs"
-                        mr={1}
-                        isLoading={updateUserDataMutation.isLoading}
-                      >
-                        Save
-                      </Button>
-                      <Button size="xs" onClick={onClose}>
-                        Discard changes
-                      </Button>
-                    </ModalFooter>
-                  </ModalContent>
-                </form>
-              </Modal>
-            </Flex>
+            {isLoggedIn &&
+              loggedUser?.data &&
+              loggedUser?.data[0]?.permissionId === 1 && (
+                <Flex
+                  justifyContent={"space-between"}
+                  flexDirection={{ base: "column", sm: "row" }}
+                  mb={2}
+                >
+                  <Button colorScheme="blue" size="xs" onClick={onOpen} mb={1}>
+                    Change user data
+                  </Button>
+                  <Modal isOpen={isOpen} onClose={onClose}>
+                    <ModalOverlay />
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                      <ModalContent>
+                        <ModalHeader>Update your profile</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody pb={3}>
+                          <FormControl isInvalid={errors.firstName}>
+                            <Input
+                              mb={1}
+                              placeholder="First name"
+                              defaultValue={user?.firstName}
+                              type={"text"}
+                              {...register("firstName", {
+                                required: "First name is required field!",
+                              })}
+                            />
+                            <FormErrorMessage mb={1}>
+                              {errors.firstName && errors.firstName.message}
+                            </FormErrorMessage>
+                          </FormControl>
+                          <FormControl isInvalid={errors.lastName}>
+                            <Input
+                              mb={1}
+                              placeholder="Last name"
+                              defaultValue={user?.lastName}
+                              type={"text"}
+                              {...register("lastName", {
+                                required: "Last name is required field!",
+                              })}
+                            />
+                            <FormErrorMessage mb={1}>
+                              {errors.lastName && errors.lastName.message}
+                            </FormErrorMessage>
+                          </FormControl>
+                          <FormControl isInvalid={errors.email}>
+                            <Input
+                              mb={1}
+                              placeholder="Email"
+                              defaultValue={user?.email}
+                              type={"email"}
+                              {...register("email", {
+                                required: "Email is required filed!",
+                              })}
+                            />
+                            <FormErrorMessage mb={1}>
+                              {errors.email && errors.email.message}
+                            </FormErrorMessage>
+                          </FormControl>
+                          <FormControl isInvalid={errors.status}>
+                            <FormLabel>User status</FormLabel>
+                            <Select {...register("status")} type="number">
+                              <option value={1}>Active</option>
+                              <option value={0}>Inactive</option>
+                            </Select>
+                          </FormControl>
+                        </ModalBody>
+                        <ModalFooter>
+                          <Button
+                            type="submit"
+                            colorScheme="green"
+                            size="xs"
+                            mr={1}
+                            isLoading={updateUserDataMutation.isLoading}
+                          >
+                            Save
+                          </Button>
+                          <Button size="xs" onClick={onClose}>
+                            Discard changes
+                          </Button>
+                        </ModalFooter>
+                      </ModalContent>
+                    </form>
+                  </Modal>
+                </Flex>
+              )}
           </Flex>
         );
       })}
