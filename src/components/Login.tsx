@@ -55,7 +55,6 @@ function Login() {
 
   function onSubmit(values: FormControlOptions) {
     loginMutation.mutate(values);
-    // console.log("Values are, ", values);
   }
 
   function handleClick() {

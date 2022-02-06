@@ -1,6 +1,7 @@
 import UserListHeader from "../components/header/UserListHeader";
 import Login from "../components/Login";
 import NewUserForm from "../components/user/NewUserForm";
+import UserDetails from "../components/user/UserDetails";
 
 const LOGGED_IN_DEFAULT_LAYOUT_ROUTES = [
     {
@@ -10,6 +11,10 @@ const LOGGED_IN_DEFAULT_LAYOUT_ROUTES = [
     {
         path: "/new-user",
         element: NewUserForm,
+    },
+    {
+        path: "/user/:id",
+        element: UserDetails,
     },
 ];
 

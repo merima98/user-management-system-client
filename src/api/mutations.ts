@@ -17,9 +17,13 @@ function login(credentials: FormControlOptions) {
     return axios.post(`/login`, credentials);
 }
 
+function updateUserData(data: { id: number, firstName: string, lastName: string, email: string, status: number }) {
+    return axios.patch(`/users/${data.id}`, { 'firstName': data.firstName, 'lastName': data.lastName, 'email': data.email, 'status': data.status });
+}
 
 const exports = {
     register,
-    login
+    login,
+    updateUserData
 };
 export default exports;

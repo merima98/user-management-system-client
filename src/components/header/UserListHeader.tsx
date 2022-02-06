@@ -2,6 +2,7 @@ import { Button, Center } from "@chakra-ui/react";
 import React from "react";
 import { useState } from "react";
 import { useQuery } from "react-query/react";
+import { Link } from "react-router-dom";
 import { Cell } from "react-table";
 
 import queries from "../../api/queries";
@@ -67,16 +68,17 @@ function UserListHeader() {
               >
                 Assign
               </Button>
-              <Button
-                zIndex={-1}
-                mb={1}
-                w={20}
-                size="sm"
-                colorScheme={"blue"}
-                onClick={() => buttonFunction(props.value)}
-              >
-                Edit
-              </Button>
+              <Link to={`/user/${props.value}`}>
+                <Button
+                  zIndex={-1}
+                  mb={1}
+                  w={20}
+                  size="sm"
+                  colorScheme={"blue"}
+                >
+                  Edit
+                </Button>
+              </Link>
               <Button
                 w={20}
                 mb={1}
