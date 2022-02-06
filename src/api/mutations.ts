@@ -21,9 +21,15 @@ function updateUserData(data: { id: number, firstName: string, lastName: string,
     return axios.patch(`/users/${data.id}`, { 'firstName': data.firstName, 'lastName': data.lastName, 'email': data.email, 'status': data.status });
 }
 
+
+function updateUserPermission(data: { id: number, permissionId: number }) {
+    return axios.patch(`/users/${data.id}`, { 'permissionId': data.permissionId });
+}
+
 const exports = {
     register,
     login,
-    updateUserData
+    updateUserData,
+    updateUserPermission
 };
 export default exports;

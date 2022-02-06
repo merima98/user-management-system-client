@@ -91,7 +91,7 @@ function NewUserForm() {
           <FormControl isInvalid={errors.firstName}>
             <InputGroup>
               <InputLeftElement
-                zIndex={1}
+                zIndex={2}
                 children={
                   <ChevronRight color={iconColor} width={20} height={16} />
                 }
@@ -111,7 +111,7 @@ function NewUserForm() {
           <FormControl isInvalid={errors.lastName}>
             <InputGroup>
               <InputLeftElement
-                zIndex={1}
+                zIndex={2}
                 children={
                   <ChevronRight color={iconColor} width={20} height={16} />
                 }
@@ -131,7 +131,7 @@ function NewUserForm() {
           <FormControl isInvalid={errors.email}>
             <InputGroup>
               <InputLeftElement
-                zIndex={1}
+                zIndex={2}
                 children={<Mail color={iconColor} width={20} height={16} />}
               />
               <Input
@@ -150,7 +150,7 @@ function NewUserForm() {
           <FormControl isInvalid={errors.username}>
             <InputGroup>
               <InputLeftElement
-                zIndex={1}
+                zIndex={2}
                 children={
                   <ChevronRight color={iconColor} width={20} height={16} />
                 }
@@ -170,7 +170,7 @@ function NewUserForm() {
           <FormControl isInvalid={errors.password}>
             <InputGroup>
               <InputLeftElement
-                zIndex={1}
+                zIndex={2}
                 children={<Lock color={iconColor} width={20} height={16} />}
               />
               <Input

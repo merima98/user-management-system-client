@@ -62,6 +62,7 @@ function UserTable(props: props) {
                 {map(
                   (column: any) => (
                     <Th
+                      zIndex={2}
                       p={5}
                       {...column.getHeaderProps(column.getSortByToggleProps())}
                       key={column.getHeaderProps().key}

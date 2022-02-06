@@ -1,4 +1,4 @@
-import { Button, Center } from "@chakra-ui/react";
+import { Button, Center, Flex } from "@chakra-ui/react";
 import React from "react";
 import { useState } from "react";
 import { useQuery } from "react-query/react";
@@ -21,12 +21,10 @@ function UserListHeader() {
   );
   const users = data ? data.data : [];
 
-  function buttonFunction(props: any) {
-    console.log("Props value,", props);
-  }
   function formatStatus(status: number) {
     return status ? "Active" : "Inactive";
   }
+
   const columns = React.useMemo(
     () => [
       {
@@ -57,17 +55,18 @@ function UserListHeader() {
         accessor: "id",
         Cell: function idCell(props: Cell) {
           return (
-            <>
-              <Button
-                mb={1}
-                size="sm"
-                zIndex={-1}
-                w={20}
-                colorScheme={"blue"}
-                onClick={() => buttonFunction(props.value)}
-              >
-                Assign
-              </Button>
+            <Flex flexDirection={"column"}>
+              <Link to={`/permission/user/${props.value}`}>
+                <Button
+                  mb={1}
+                  size="sm"
+                  zIndex={-1}
+                  w={20}
+                  colorScheme={"blue"}
+                >
+                  Assign
+                </Button>
+              </Link>
               <Link to={`/user/${props.value}`}>
                 <Button
                   zIndex={-1}
@@ -85,11 +84,11 @@ function UserListHeader() {
                 zIndex={-1}
                 size="sm"
                 colorScheme={"red"}
-                onClick={() => buttonFunction(props.value)}
+                cursor={"pointer"}
               >
                 Delete
               </Button>
-            </>
+            </Flex>
           );
         },
       },

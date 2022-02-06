@@ -68,7 +68,7 @@ function Login() {
           <FormControl isInvalid={errors.email}>
             <InputGroup>
               <InputLeftElement
-                zIndex={1}
+                zIndex={2}
                 children={<Mail color={iconColor} width={20} height={16} />}
               />
               <Input
@@ -87,7 +87,7 @@ function Login() {
           <FormControl isInvalid={errors.password}>
             <InputGroup>
               <InputLeftElement
-                zIndex={1}
+                zIndex={2}
                 children={<Lock color={iconColor} width={20} height={16} />}
               />
               <Input
