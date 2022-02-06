@@ -94,7 +94,8 @@ function UserTable(props: props) {
                       </Box>
                       <Text>
                         {column.canFilter &&
-                        column.render("Header") !== "Actions"
+                        column.render("Header") !== "Actions" &&
+                        column.render("Header") !== "Status"
                           ? column.render("Filter")
                           : null}
                       </Text>
