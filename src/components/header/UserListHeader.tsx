@@ -1,9 +1,21 @@
-import { Button, Center, Flex } from "@chakra-ui/react";
-import React from "react";
+import {
+  Button,
+  Center,
+  Flex,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  useToast,
+} from "@chakra-ui/react";
+import React, { useRef } from "react";
 import { useState } from "react";
-import { useQuery } from "react-query/react";
-import { Link } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "react-query/react";
+import { Link, useNavigate } from "react-router-dom";
 import { Cell } from "react-table";
+import mutations from "../../api/mutations";
 
 import queries from "../../api/queries";
 import UserTable from "../user/UserTable";
@@ -11,6 +23,8 @@ import UserTable from "../user/UserTable";
 function UserListHeader() {
   const defaultPageSize = 10;
   const [pageSize, setPageSize] = useState(defaultPageSize);
+  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const [userId, setUserId] = useState(0);
 
   const { data } = useQuery(
     ["users-list", pageSize],
@@ -24,6 +38,25 @@ function UserListHeader() {
   function formatStatus(status: number) {
     return status ? "Active" : "Inactive";
   }
+
+  const onCloseAlert = () => setIsOpenAlert(false);
+  const cancelRef = useRef<HTMLButtonElement>(null);
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const toast = useToast();
+
+  const deleteUserMutation = useMutation(mutations.deleteUser, {
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("users-list");
+      navigate("/");
+      toast({
+        title: `User deleted!`,
+        status: "success",
+        position: "top",
+        isClosable: true,
+      });
+    },
+  });
 
   const columns = React.useMemo(
     () => [
@@ -78,22 +111,64 @@ function UserListHeader() {
                   Edit
                 </Button>
               </Link>
-              <Button
-                w={20}
-                mb={1}
-                zIndex={-1}
-                size="sm"
-                colorScheme={"red"}
-                cursor={"pointer"}
-              >
-                Delete
-              </Button>
+              <>
+                <Button
+                  w={20}
+                  mb={1}
+                  zIndex={1}
+                  size="sm"
+                  colorScheme={"red"}
+                  cursor={"pointer"}
+                  onClick={() => {
+                    setIsOpenAlert(true);
+                    setUserId(props.value);
+                  }}
+                >
+                  Delete
+                </Button>
+                <AlertDialog
+                  isOpen={isOpenAlert}
+                  onClose={onCloseAlert}
+                  leastDestructiveRef={cancelRef}
+                >
+                  <AlertDialogOverlay background={"blackAlpha.50"}>
+                    <AlertDialogContent boxShadow={"none"}>
+                      <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                        Delete user
+                      </AlertDialogHeader>
+                      <AlertDialogBody>
+                        Are you sure you want to delete this user?
+                      </AlertDialogBody>
+                      <AlertDialogFooter>
+                        <Button
+                          ref={cancelRef}
+                          size="xs"
+                          onClick={onCloseAlert}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          colorScheme="red"
+                          size="xs"
+                          onClick={() => {
+                            deleteUserMutation.mutate(userId);
+                            setIsOpenAlert(false);
+                          }}
+                          ml={2}
+                        >
+                          Delete
+                        </Button>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialogOverlay>
+                </AlertDialog>
+              </>
             </Flex>
           );
         },
       },
     ],
-    []
+    [isOpenAlert, deleteUserMutation, userId]
   );
   function loadMoreUsers() {
     let newPageSize = pageSize;

@@ -29,7 +29,7 @@ function Header() {
 
   return (
     <Container
-      zIndex={3}
+      zIndex={4}
       maxW={"100%"}
       position={"fixed"}
       borderBottom={"1px solid"}

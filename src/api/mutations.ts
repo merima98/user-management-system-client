@@ -26,10 +26,15 @@ function updateUserPermission(data: { id: number, permissionId: number }) {
     return axios.patch(`/users/${data.id}`, { 'permissionId': data.permissionId });
 }
 
+function deleteUser(id: number) {
+    return axios.delete(`/users/${id}`);
+}
+
 const exports = {
     register,
     login,
     updateUserData,
-    updateUserPermission
+    updateUserPermission,
+    deleteUser
 };
 export default exports;

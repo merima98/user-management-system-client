@@ -52,7 +52,12 @@ function UserTable(props: props) {
   return (
     <Center>
       <ChakraTable size={size} {...getTableProps()} mt={20} w={"70vw"} mb={8}>
-        <Thead position={"sticky"} top={"2.5rem"} bg={tableHeadBackgroundColor}>
+        <Thead
+          position={"sticky"}
+          top={"2.5rem"}
+          bg={tableHeadBackgroundColor}
+          zIndex={3}
+        >
           {map(
             (group) => (
               <Tr
