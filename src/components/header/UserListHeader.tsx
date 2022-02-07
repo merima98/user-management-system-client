@@ -8,8 +8,10 @@ import {
   Box,
   AlertDialogFooter,
   AlertDialogHeader,
+  Spinner,
   AlertDialogOverlay,
   useToast,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import React, { useRef } from "react";
 import { toInteger } from "lodash";
@@ -25,13 +27,15 @@ import UserTable from "../user/UserTable";
 
 function UserListHeader() {
   const defaultPageSize = 10;
+  const emptyColor = useColorModeValue("blue.200", "orange.200");
+  const spinnerColor = useColorModeValue("blue.500", "orange.500");
   const [pageSize, setPageSize] = useState(defaultPageSize);
   const isLoggedIn = useAuth((state) => state.isLoggedIn);
 
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [userId, setUserId] = useState(0);
 
-  const { data } = useQuery(
+  const { data, isLoading } = useQuery(
     ["users-list", pageSize],
     () => queries.getUsers(pageSize),
     {
@@ -195,12 +199,26 @@ function UserListHeader() {
   }
   return (
     <>
-      <UserTable data={users} columns={columns} />
-      <Center>
-        <Button mb={3} colorScheme="blue" size="xs" onClick={loadMoreUsers}>
-          Load more
-        </Button>
-      </Center>
+      {isLoading ? (
+        <Center mt={40}>
+          <Spinner
+            thickness="4px"
+            speed="0.75s"
+            emptyColor={emptyColor}
+            color={spinnerColor}
+            size="xl"
+          />
+        </Center>
+      ) : (
+        <>
+          <UserTable data={users} columns={columns} />
+          <Center>
+            <Button mb={3} colorScheme="blue" size="xs" onClick={loadMoreUsers}>
+              Load more
+            </Button>
+          </Center>
+        </>
+      )}
     </>
   );
 }
