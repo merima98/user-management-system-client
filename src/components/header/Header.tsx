@@ -60,7 +60,9 @@ function Header() {
             </Box>
 
             <Box cursor={"pointer"} fontSize={"sm"}>
-              <Link to="/new-user">New user</Link>
+              <Link to="/new-user" data-cy="new-user-link">
+                New user
+              </Link>
             </Box>
 
             <Box>

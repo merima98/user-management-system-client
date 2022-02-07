@@ -98,6 +98,7 @@ function NewUserForm() {
                 }
               />
               <Input
+                data-cy="input-firstName"
                 placeholder="First name"
                 type={"text"}
                 {...register("firstName", {
@@ -118,6 +119,7 @@ function NewUserForm() {
                 }
               />
               <Input
+                data-cy="input-lastName"
                 placeholder="Last name"
                 type={"text"}
                 {...register("lastName", {
@@ -136,6 +138,7 @@ function NewUserForm() {
                 children={<Mail color={iconColor} width={20} height={16} />}
               />
               <Input
+                data-cy="input-new-user-email"
                 placeholder="Email"
                 type={"email"}
                 _focus={{ backgroundColor: inputBackgroundColor }}
@@ -157,6 +160,7 @@ function NewUserForm() {
                 }
               />
               <Input
+                data-cy="input-username"
                 placeholder="Username"
                 type={"text"}
                 {...register("username", {
@@ -175,6 +179,7 @@ function NewUserForm() {
                 children={<Lock color={iconColor} width={20} height={16} />}
               />
               <Input
+                data-cy="input-new-user-password"
                 placeholder="Password"
                 autoComplete="Passowrd"
                 type={show ? "text" : "password"}
@@ -251,6 +256,7 @@ function NewUserForm() {
             </InputGroup>
           </FormControl>
           <Button
+            data-cy="create-user-button"
             type="submit"
             boxShadow={"sm"}
             _hover={{ boxShadow: "md" }}
