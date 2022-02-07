@@ -13,6 +13,7 @@ function register(user: {
 }) {
     return axios.post(`/register`, user);
 }
+
 function login(credentials: FormControlOptions) {
     return axios.post(`/login`, credentials);
 }
@@ -20,7 +21,6 @@ function login(credentials: FormControlOptions) {
 function updateUserData(data: { id: number, firstName: string, lastName: string, email: string, status: number }) {
     return axios.patch(`/users/${data.id}`, { 'firstName': data.firstName, 'lastName': data.lastName, 'email': data.email, 'status': data.status });
 }
-
 
 function updateUserPermission(data: { id: number, permissionId: number }) {
     return axios.patch(`/users/${data.id}`, { 'permissionId': data.permissionId });

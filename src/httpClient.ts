@@ -12,12 +12,12 @@ instance.interceptors.request.use(
                 authorization: localStorage.getItem("token")
             }
         }
-
     },
     function (error) {
         return Promise.reject(error);
     }
 );
+
 instance.interceptors.response.use(
     function (response) {
         return response;

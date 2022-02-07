@@ -6,7 +6,6 @@ function getUsers(pageSize: number) {
 
 function getUserById(userId: number) {
     return axios.get(`/users?id=${userId}`);
-
 }
 
 const exports = {

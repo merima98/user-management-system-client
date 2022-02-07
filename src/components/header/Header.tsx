@@ -58,13 +58,11 @@ function Header() {
             <Box fontSize={"sm"}>
               <Link to="/">User management system</Link>
             </Box>
-
             <Box cursor={"pointer"} fontSize={"sm"}>
               <Link to="/new-user" data-cy="new-user-link">
                 New user
               </Link>
             </Box>
-
             <Box>
               <Menu>
                 <MenuButton transition="all 0.2s">
@@ -176,4 +174,5 @@ function Header() {
     </Container>
   );
 }
+
 export default Header;

@@ -10,6 +10,7 @@ type User = {
     setUserId: (userId: string) => void;
     removeUserId: () => void;
 };
+
 const useAuth = create<Auth>((set: SetState<Auth>) => ({
     isLoggedIn: Boolean(window.localStorage.getItem("token")) || false,
     setIsLoggedIn: (value: boolean, userId: string, token?: string) => {
