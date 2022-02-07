@@ -1,5 +1,6 @@
 import UserListHeader from "../components/header/UserListHeader";
 import Login from "../components/Login";
+import CurrentUser from "../components/user/CurrentUser";
 import NewUserForm from "../components/user/NewUserForm";
 import UserDetails from "../components/user/UserDetails";
 import UserPermissionDetails from "../components/user/UserPermissionDetails";
@@ -21,6 +22,10 @@ const LOGGED_IN_DEFAULT_LAYOUT_ROUTES = [
         path: "/permission/user/:id",
         element: UserPermissionDetails,
     },
+    {
+        path: '/user/my-profile',
+        element: CurrentUser
+    }
 ];
 
 const LOGGED_OUT_NO_LAYOUT_ROUTES = [

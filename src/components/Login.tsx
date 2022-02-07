@@ -20,7 +20,7 @@ import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 
 import mutations from "../api/mutations";
-import { useAuth } from "../state";
+import { useAuth, useUser } from "../state";
 
 function Login() {
   const {
@@ -33,12 +33,14 @@ function Login() {
   const toast = useToast();
   const [show, setShow] = useState(false);
   const setIsLoggedIn = useAuth((state) => state.setIsLoggedIn);
+  const setUserId = useUser((state) => state.setUserId);
   const iconColor = useColorModeValue("black", "orange");
   const inputBackgroundColor = useColorModeValue("white", "gray.700");
 
   const loginMutation = useMutation(mutations.login, {
     onSuccess: (data) => {
       setIsLoggedIn(true, data.data.user.id, data.data.accessToken);
+      setUserId(data.data.user.id);
       navigate("/");
     },
     onError: (error: ErrorOption) => {
