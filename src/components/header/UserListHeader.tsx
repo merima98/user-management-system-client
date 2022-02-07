@@ -19,8 +19,8 @@ import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query/react";
 import { Link, useNavigate } from "react-router-dom";
 import { Cell } from "react-table";
-import mutations from "../../api/mutations";
 
+import mutations from "../../api/mutations";
 import queries from "../../api/queries";
 import { useAuth } from "../../state";
 import UserTable from "../user/UserTable";

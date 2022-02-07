@@ -60,11 +60,11 @@ function UserDetails() {
   });
 
   function onSubmit(values: FieldValues) {
-    let firstName: string = values.firstName;
-    let lastName: string = values.lastName;
-    let email: string = values.email;
-    let status: number = toInteger(values.status);
-    let userData = {
+    const firstName: string = values.firstName;
+    const lastName: string = values.lastName;
+    const email: string = values.email;
+    const status: number = toInteger(values.status);
+    const userData = {
       id: toInteger(params.id),
       firstName: firstName,
       lastName: lastName,

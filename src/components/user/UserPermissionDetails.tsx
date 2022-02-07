@@ -49,8 +49,8 @@ function UserPermissionDetails() {
   );
 
   function onSubmit(values: FieldValues) {
-    let permissionId: number = toInteger(values.permissionId);
-    let userData = {
+    const permissionId: number = toInteger(values.permissionId);
+    const userData = {
       id: toInteger(params.id),
       permissionId: permissionId,
     };
