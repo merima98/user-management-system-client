@@ -13,7 +13,6 @@ import {
 } from "@chakra-ui/react";
 import { Moon, Sun, User } from "react-feather";
 import { Link } from "react-router-dom";
-import { toInteger } from "lodash";
 import { useQuery } from "react-query";
 
 import { useAuth, useUser } from "../../state";
@@ -35,7 +34,7 @@ function Header() {
   }
 
   const { data } = useQuery(["my-profile-data", userId], () =>
-    queries.getUserById(toInteger(userId))
+    queries.getUserById(Number(userId))
   );
 
   const user = data?.data[0];

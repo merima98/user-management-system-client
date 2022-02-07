@@ -23,7 +23,6 @@ import {
 } from "@chakra-ui/react";
 import { FieldValues, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query/react";
-import { toInteger } from "lodash";
 
 import mutations from "../../api/mutations";
 import queries from "../../api/queries";
@@ -40,7 +39,7 @@ function CurrentUser() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const queryClient = useQueryClient();
-  const userId = toInteger(window.localStorage.getItem("userId"));
+  const userId = Number(window.localStorage.getItem("userId"));
 
   const updateUserDataMutation = useMutation(mutations.updateUserData, {
     onSuccess: (data) => {
@@ -59,7 +58,7 @@ function CurrentUser() {
     const firstName: string = values.firstName;
     const lastName: string = values.lastName;
     const email: string = values.email;
-    const status: number = toInteger(values.status);
+    const status: number = Number(values.status);
     const userData = {
       id: userId,
       firstName: firstName,
@@ -70,7 +69,7 @@ function CurrentUser() {
     updateUserDataMutation.mutate(userData);
   }
   const { data, isLoading } = useQuery("my-profile", () =>
-    queries.getUserById(toInteger(userId))
+    queries.getUserById(Number(userId))
   );
 
   function formatStatus(status: number) {

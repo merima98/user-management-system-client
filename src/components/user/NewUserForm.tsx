@@ -19,7 +19,6 @@ import { useState } from "react";
 import { ErrorOption, FieldValues, useForm } from "react-hook-form";
 import { Eye, EyeOff, ChevronRight } from "react-feather";
 import { useMutation, useQueryClient } from "react-query/react";
-import { toInteger } from "lodash";
 import { useNavigate } from "react-router-dom";
 
 import mutations from "../../api/mutations";
@@ -75,8 +74,8 @@ function NewUserForm() {
       username: values.username,
       email: values.email,
       password: values.password,
-      status: toInteger(values.status),
-      permissionId: toInteger(values.permissionId),
+      status: Number(values.status),
+      permissionId: Number(values.permissionId),
     };
     createNewUserMutation.mutate(newUser);
   }

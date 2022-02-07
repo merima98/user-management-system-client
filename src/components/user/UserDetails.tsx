@@ -23,7 +23,6 @@ import {
 } from "@chakra-ui/react";
 import { FieldValues, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query/react";
-import { toInteger } from "lodash";
 import { useParams } from "react-router-dom";
 
 import mutations from "../../api/mutations";
@@ -63,9 +62,9 @@ function UserDetails() {
     const firstName: string = values.firstName;
     const lastName: string = values.lastName;
     const email: string = values.email;
-    const status: number = toInteger(values.status);
+    const status: number = Number(values.status);
     const userData = {
-      id: toInteger(params.id),
+      id: Number(params.id),
       firstName: firstName,
       lastName: lastName,
       email: email,
@@ -74,12 +73,12 @@ function UserDetails() {
     updateUserDataMutation.mutate(userData);
   }
   const { data, isLoading } = useQuery("user", () =>
-    queries.getUserById(toInteger(userId))
+    queries.getUserById(Number(userId))
   );
   function formatStatus(status: number) {
     return status ? "Active" : "Inactive";
   }
-  const loggedUserId = toInteger(window.localStorage.getItem("userId"));
+  const loggedUserId = Number(window.localStorage.getItem("userId"));
   const currentLoggedUserQuery = useQuery("current-logged-user", () =>
     queries.getUserById(loggedUserId)
   );

@@ -14,7 +14,6 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React, { useRef } from "react";
-import { toInteger } from "lodash";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query/react";
 import { Link, useNavigate } from "react-router-dom";
@@ -66,7 +65,7 @@ function UserListHeader() {
       });
     },
   });
-  const loggedUserId = toInteger(window.localStorage.getItem("userId"));
+  const loggedUserId = Number(window.localStorage.getItem("userId"));
   const currentLoggedUserQuery = useQuery("current-logged-user", () =>
     queries.getUserById(loggedUserId)
   );
