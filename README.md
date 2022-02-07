@@ -1,5 +1,6 @@
 # [User management system](https://user-management-system-client.vercel.app/)
 
+[![Cypress.io tests](https://img.shields.io/badge/cypress.io-tests-green.svg?style=flat-square)](https://cypress.io)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/merima98/user-management-system-client/blob/main/LICENSE)
 
 ![Screenshot](docs/images/screenshot.png)
